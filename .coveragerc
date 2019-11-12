@@ -1,0 +1,5 @@
+[run]
+include = frett_generator/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin
