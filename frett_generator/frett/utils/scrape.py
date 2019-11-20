@@ -55,7 +55,7 @@ def mbl_frett(
     flokkur_obj = Flokkur.objects.get(nafn=flokkur)
     for malsgrein in efni:
         tokens = word_tokenize(malsgrein.text)
-        mork = [markari.marka_token(token) for token in tokens]
+        mork = [markari.bigram_marka(token) for token in tokens]
         if len(tokens) == 0 or len(mork) == 0:
             continue
         # setjum málgreinina í gagnagrunninn
