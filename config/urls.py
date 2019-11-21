@@ -5,18 +5,20 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
-from frett_generator.frett.views import heim
+from frett_generator.frett.views import heim, frett
 
 urlpatterns = [
     path("", heim, name="home"),
-    path(
-        "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
-    ),
+    path("frett/<int:frett_id>", frett, name="frett"),
+
+    # path(
+    #     "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
+    # ),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
-    path("users/", include("frett_generator.users.urls", namespace="users")),
-    path("accounts/", include("allauth.urls")),
+    # path("users/", include("frett_generator.users.urls", namespace="users")),
+    # path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

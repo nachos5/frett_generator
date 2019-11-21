@@ -1,5 +1,6 @@
 import itertools
 import os
+import time
 import zipfile
 
 from collections import Counter
@@ -11,9 +12,22 @@ from django.conf import settings
 
 
 class Markari:
-    """ Þessi klasi geymir gullstaðalinn og markar eftir honum """
+    """ 
+    Þessi klasi geymir gullstaðalinn og markar eftir honum.
+    
+    Dæmi um notkun:
+    m = Markari(n=5) # default n skilgreint í settings
+    m.marka("hestur")
+    m.reset_prev() # til að "gleyma"
+    """
 
     def __init__(self, *args, **kwargs):
+        # fjöldi "orðsamhengis" (bigram etc.)
+        if "n" in kwargs and kwargs["n"] >= 2:
+            n = kwargs.pop("n")
+        else:
+            n = settings.DEFAULT_N_MORKUN
+        self.n = n
         # lesum gullstaðalinn
         gull = os.path.join(settings.STATIC_ROOT, "maltaekni-gogn/MIM-GOLD-1_0.zip")
         zf = zipfile.ZipFile(gull)
@@ -34,63 +48,91 @@ class Markari:
 
         # höfum bara einn stóran lista af tvenndum
         data = list(itertools.chain(*data))
-        # geymum hann svo í dicti á forminu (tvennd):fjöldi
-        single_data = Counter(data)
 
-        # til að "bigram" tagga þarf að geyma gögnin svona
-        # hvert stak eru tvö orð hlið við hlið
-        bi_data = list(zip(data, data[1:]))
+        # til að n-tagga þarf að geyma gögnin svona
+        # hvert stak eru n orð hlið við hlið
+        shift_lists = []
+        for i in range(self.n):
+            shift_lists.append(data[i:])
+        n_data = list(zip(*shift_lists))
         # geymum í dicti á forminu (tvennd):fjöldi
-        bi_data = Counter(bi_data)
-        # látum markarann geyma síðasta markið sem hann skilaði
-        self.prev = None
+        n_data = Counter(n_data)
+        # látum markarann geyma n-1 síðustu mörkin sem hann markaði
+        self.prev = []
 
-        # til að "trigram" tagga þarf að geyma gögnin svona
-        # hvert stak eru tvö orð hlið við hlið
-        bi_data = list(zip(data, data[1:]))
-        # geymum í dicti á forminu (tvennd):fjöldi
-        bi_data = Counter(bi_data)
-        # látum markarann geyma síðasta markið sem hann skilaði
-        self.prev = None
+        self.data = n_data
 
-        self.single_data = single_data
-        self.bi_data = bi_data
+    def reset_prev(self):
+        """ 
+        markarinn man það sem hann markaði áður og notar þær upplýsingar
+        til að m-marka, kalla á þetta fall til að "gleyma".
+        """
+        self.prev = []
 
-    def marka(self, ordmynd):
-        # sækjum öll þau tilvik sem orðmyndin kemur fyrir
+    def marka(self, ordmynd, n=-1):
+        if n == -1:
+            n = self.n
+        # erum ekki með nægt samhengi til að nota þetta n
+        if len(self.prev) < n - 1:
+            # förum í n-ið fyrir neðan
+            return self.marka(ordmynd, n - 1)
+        # sækjum öll þau tilvik sem orðmyndin kemur fyrir sem n-ta orðið
         x = [
-            (key, value) for key, value in self.single_data.items() if key[0] == ordmynd
+            (key, value)
+            for key, value in self.data.items()
+            if len(key[0][0]) > 0 and key[n - 1][0].lower() == ordmynd.lower()
         ]
         # fannst ekkert
         if not x:
-            return settings.VILLUMARK
+            # skilum villu ef n = 1
+            if n == 1:
+                self.reset_prev()
+                return settings.VILLUMARK
+            # annars tékkum n-ið fyrir neðan
+            else:
+                self.reset_prev()
+                return self.marka(ordmynd, n - 1)
 
-        # fáum og skilum því sem kemur oftast fyrir
-        x = max(x, key=itemgetter(1))
-        mark = x[0][1]
-        self.prev = mark
-        return mark
-
-    def bigram_marka(self, ordmynd):
-        if not self.prev:
-            return self.marka(ordmynd)
-        # sækjum öll þau tilvik sem orðmyndin kemur fyrir sem seinna orðið
-        x = [
-            (key, value) for key, value in self.bi_data.items() if key[1][0] == ordmynd
-        ]
-        # fannst ekkert
-        if not x:
-            return settings.VILLUMARK
-
-        # sækjum þau tilvik þar sem fyrra orðið er taggað með prev markinu
-        y = [(key, value) for key, value in x if key[0][1] == self.prev]
+        if n == 1:
+            y = x
+        else:
+            y = []
+        # sækjum þau tilvik þar sem fyrri orðið eru tögguð með prev mörkunum
+        for i in range(len(self.prev)):
+            for key, value in x:
+                if key[i][1] == self.prev[i]:
+                    y.append((key, value))
         # ef það fannst eitthvað finnum við það sem kemur oftast fyrir
         if y:
             z = max(y, key=itemgetter(1))
-        # annars notum við bara "einmarkara"
+        # annars notum við n-ið fyrir neðan (endurkvæmni)
         else:
-            return self.marka(ordmynd)
+            self.reset_prev()
+            return self.marka(ordmynd, n - 1)
 
-        mark = z[0][1][1]
-        self.prev = mark
+        mark = z[0][n - 1][1]
+
+        # uppfærum prev
+        self.prev.append(mark)
+        self.prev = self.prev[-n:]
+        if len(self.prev) == self.n:
+            self.prev = self.prev[1:]
+
         return mark
+
+
+def takn(strengur):
+    return (
+        strengur.replace(" .", ".")
+        .replace(" ,", ",")
+        .replace(" !", "!")
+        .replace(" ?", "?")
+        .replace(" ;", ";")
+        .replace(" :", ":")
+        .replace("( ", "(")
+        .replace(") ", ")")
+        .replace("[ ", "[")
+        .replace("] ", "]")
+        .replace(" %", "%")
+    )
+

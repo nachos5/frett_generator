@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% if titill_form %}
+  <div class="my-5">
+    <h2>Veldu 1-10 orð til að útbúa titil fréttarinnar (í réttri röð).</h2>
+    <small>Allir stafir titilsins eru birtir sem hástafir.</small>
+  </div>
+  {% crispy titill_form %}
+{% else %}
+  <small>HTML kóði:</small>
+  <textarea class="col-12">{{ frett.html }}</textarea>
+  <hr />
+  <h2 class="text-uppercase mb-4">{{ frett.titill }}</h2>
+  <div>{{ frett.html|safe }}</div>
+{% endif %}
+
+{% endblock content %}

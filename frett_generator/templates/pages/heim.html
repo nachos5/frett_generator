@@ -5,4 +5,16 @@
 
 {% crispy form %}
 
+{% if nyjast %}
+  <hr />
+  <h2 class="my-3">Nýjustu fréttir:</h2>
+  <div class="d-flex flex-column">
+    {% for n in nyjast %}
+      <a href="{{ n.get_absolute_url }}" class="my-2 text-uppercase">
+        {{ n.titill }}
+      </a>
+    {% endfor %}
+  </div>
+{% endif %}
+
 {% endblock content %}

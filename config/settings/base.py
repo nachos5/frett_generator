@@ -72,6 +72,7 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "rest_framework",
+    "django_select2",
 ]
 
 LOCAL_APPS = [
@@ -273,10 +274,18 @@ SHELL_PLUS_POST_IMPORTS = (
     ("frett_generator.frett.utils.scrape", "*"),
 )
 
-ADSKILNADARTAKN = "╪"
-FJOLDI_MALSGREINA = 5
-VILLUMARK = "unk"
-VILLU_THRESHOLD = 1
+DEFAULT_N_MORKUN = (
+    4  # markarinn markar með n orða samhengi, því hærra, því lengri tíma tekur að marka
+)
+ADSKILNADARTAKN = (
+    "╪"  # orð eru aðskilin með þessu tákni til að geyma sem streng í gagnagrunninum
+)
+FJOLDI_MALSGREINA = 10  # fjöldi málsgreina per frétt
+MIN_STAFIR_TOKENS = 150  # lágmarksfjöldi stafa í málsgrein
+VILLUMARK = "unk"  # ef markarinn nær ekki að marka er þetta tákn notað
+VILLU_THRESHOLD = (
+    1  # villur mega ekki vera fleiri en þetta gildi ef málsgreinin skal vera notuð
+)
 
 import nltk
 import os
