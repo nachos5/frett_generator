@@ -1,8 +1,8 @@
 # Fréttasmiður
 
-Fréttasmiðurinn er lokaverkefni Guðmundur Óla Norlands fyrir áfangann **Inngangur að máltækni** í *Háskóla Íslands*. Hann er vefforrit sem sér um að smíða fréttir fyrir þig! Gögnin sem smiðurinn nýtir eru einungis frá mbl.is eins og stendur. Gögnin eru mörkuð með hjálp *Gullstaðalsins*: http://malfong.is/?pg=gull
+Fréttasmiðurinn er lokaverkefni Guðmundur Óla Norlands fyrir áfangann **Inngangur að máltækni** í *Háskóla Íslands*. Smiðurinn er vefforrit sem sér um að smíða fréttir fyrir þig! Gögnin sem smiðurinn nýtir eru einungis frá mbl.is eins og stendur. Gögnin eru mörkuð með hjálp *Gullstaðalsins*: http://malfong.is/?pg=gull
 
-Tilgangur verkefnisins er að athuga hversu lesanlegan og áhugaverðan texta má framleiða með því að nota einungis orðasafn frá íslenskum fréttamiðlum. Málsgreinar eru markaðar og geymdar í gagnagrunni. Þegar frétt er útbúin eru *n* margar mörkunarbeinagrindur (einungis mörk, ekki orðmyndir) sóttar úr gagnagrunninum sem mynda svo fréttabeinagrindina. Allar orðmyndir sem finnast í gagnagrunninum eru því næst nýttar og valdar slembið til að fylla upp í beinagrindina fyrir hvert og eitt mark.
+Tilgangur verkefnisins er að athuga hversu lesanlegan og áhugaverðan texta má framleiða með því að nota einungis orðasafn frá íslenskum fréttamiðlum. Málsgreinar eru markaðar og geymdar í gagnagrunni. Þegar frétt er útbúin eru *x* margar mörkunarbeinagrindur (einungis mörk, ekki orðmyndir) sóttar úr gagnagrunninum sem mynda svo fréttabeinagrindina. Allar orðmyndir sem finnast í gagnagrunninum eru því næst nýttar og valdar slembið til að fylla upp í beinagrindina fyrir hvert og eitt mark.
 
 Tilgangurinn er vissulega einnig að hafa gaman, þar sem án undantekninga verða fréttirnar mjög svo súrar og samhengislausar.
 
@@ -18,7 +18,7 @@ Mikilvægt er að fylgja öllum eftirfarandi skrefum gaumgæfilega (ath. allar s
 
 1. Sækja verkefnið með **git pull https://github.com/nachos5/frettasmidur**
 2. Búa til gagnagrunn með PostgreSQL, hér eru allar nauðsynlegar upplýsingar fyrir nýgræðinga: http://www.postgresqltutorial.com/
-3. Búa til **.env** skrá í rót verkefnisins og stilla breytuna DATABASE_URL með gagnagrunninum sem þú bjóst til, sniðið er svona: DATABASE_URL=postgres://notandi:lykilorð@localhost:5432/heiti_gagnagrunnsins
+3. Búa til **.env** skrá í rót verkefnisins og stilla breytuna **DATABASE_URL** með gagnagrunninum sem þú bjóst til, sniðið er svona: **DATABASE_URL=postgres://notandi:lykilorð@localhost:5432/heiti_gagnagrunnsins**
 4. Sækja python pakka með pip:
     1. Mæli sterklega með því að setja upp environment í rót verkefnisins, hér má lesa hvernig það er gert á þínu stýrikerfi: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
     2. Virkja environmentið (er einnig lýst á slóðinni hér fyrir ofan).
@@ -35,7 +35,7 @@ Mikilvægt er að fylgja öllum eftirfarandi skrefum gaumgæfilega (ath. allar s
 
 # Mörkun
 * Markarann má finna í skránni [**frett_generator.frett.utils.__init__.py**](https://github.com/nachos5/frettasmidur/blob/master/frett_generator/frett/utils/__init__.py)
-* Hann er *n-markari* sem merkið að hann heldur utan um samhengi *n* orða og markar eftir því. Því hærra *n* því mögulega meiri nákvæmni en aftur á móti hærra flækjustig.
+* Hann er *n-markari* sem merkir að hann heldur utan um samhengi *n* orða og markar eftir því. Því hærra *n* því mögulega meiri nákvæmni en aftur á móti hærra flækjustig.
 * Stilla má *default*-gildið á *n* í [**config.settings.base.py**](https://github.com/nachos5/frettasmidur/blob/master/config/settings/base.py)
 
 # Fréttasmíðar
