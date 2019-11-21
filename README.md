@@ -6,7 +6,7 @@ Tilgangur verkefnisins er að athuga hversu lesanlegan og áhugaverðan texta m�
 
 Tilgangurinn er vissulega einnig að hafa gaman, þar sem án undantekninga verða fréttirnar mjög svo súrar og samhengislausar.
 
-Ég mæli sterklega með að skoða fréttasmiðinn í skýinu hér:
+Ég mæli sterklega með að skoða fréttasmiðinn í skýinu hér: [**https://frettasmidur.herokuapp.com/**](https://frettasmidur.herokuapp.com/)
 
 Einnig er hægt að setja hann upp *local* með því að fylgja eftirfarandi uppsetningu:
 
@@ -24,7 +24,7 @@ Mikilvægt er að fylgja öllum eftirfarandi skrefum gaumgæfilega (ath. allar s
     2. Virkja environmentið (er einnig lýst á slóðinni hér fyrir ofan).
     3. Keyra skipunina **pip install -r ./requirements/local.txt**
 5. Keyra skipunina **python manage.py migrate** til að búa til töflurnar í gagnagrunninum. [Hér](https://github.com/nachos5/frettasmidur/blob/master/frett_generator/frett/models.py) má skoða *Django-modelin*.
-6. Keyra skipunina **python manage.py loaddata ./db.json** til að setja gögn í gagnagrunninn, gögnin innihalda um *2000* málsgreinar, skrapaðar frá MBL. Hér væri einnig hægt að skrapa sjálf/ur nýjar fréttir frá MBL, ef áhugi er fyrir hendi [smelltu hér](#skröpun) til fara í þann kafla.
+6. Keyra skipunina **python manage.py loaddata db.json** til að setja gögn í gagnagrunninn, gögnin innihalda um *2000* málsgreinar, skrapaðar frá MBL. Hér væri einnig hægt að skrapa sjálf/ur nýjar fréttir frá MBL, ef áhugi er fyrir hendi [smelltu hér](#skröpun) til fara í þann kafla.
 7. Keyra skipunina **python manage.py collectstatic**.
 8. Keyra skipunina **python manage.py runserver**
 9. Fara á http://127.0.0.1:8000/!
