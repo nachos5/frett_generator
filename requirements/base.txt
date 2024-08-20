@@ -21,6 +21,6 @@ coreapi==2.3.3  # https://github.com/core-api/python-client
 # mitt stöff
 beautifulsoup4==4.8.1
 nefnir==1.0.2
-nltk==3.4.5
+nltk==3.9
 pandas==0.25.3
 django-select2==7.1.2
